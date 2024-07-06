@@ -1,4 +1,4 @@
-﻿public static class TakingTurns {
+public static class TakingTurns {
     public static void Test() {
         // TODO Problem 1 - Run test cases and fix the code to match requirements
         // Test Cases
@@ -16,6 +16,11 @@
         while (players.Length > 0)
             players.GetNextPerson();
         // Defect(s) Found: 
+
+        /// <summary> 
+        /// Persons are not correctly re-enqueued after their turns decrement to 1. 
+        /// This results in incorrect sequencing and premature removal from the queue.
+        /// </summary>
 
         Console.WriteLine("---------");
 
@@ -40,6 +45,10 @@
 
         // Defect(s) Found: 
 
+        /// <summary> 
+        /// Persons with finite turns are not correctly re-enqueued, leading to incorrect sequencing and premature queue completion.
+        /// </summary>
+
         Console.WriteLine("---------");
 
         // Test 3
@@ -58,6 +67,11 @@
         }
         // Defect(s) Found: 
 
+        /// <summary> 
+        /// Handling of persons with infinite turns (turns <= 0) is incorrect. 
+        /// They are not correctly re-enqueued and prematurely drop out of the queue.
+        /// </summary>
+
         Console.WriteLine("---------");
 
          // Test 4
@@ -73,7 +87,13 @@
             players.GetNextPerson();
             // Console.WriteLine(players);
         }
-        // Defect(s) Found: 
+        // Defect(s) Found:
+
+        /// <summary> 
+        /// Similar issue with handling of persons with infinite turns. 
+        /// Persons with turns <= 0 are not managed correctly, affecting the sequence and completeness of the queue.
+        /// </summary>
+        
 
         Console.WriteLine("---------");
 
@@ -84,5 +104,9 @@
         players = new TakingTurnsQueue();
         players.GetNextPerson();
         // Defect(s) Found:
+
+        /// <summary> 
+        /// Error message handling when attempting to dequeue from an empty queue needs validation. 
+        /// </summary>
     }
 }
