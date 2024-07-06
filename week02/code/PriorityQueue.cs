@@ -1,4 +1,4 @@
-﻿public class PriorityQueue {
+public class PriorityQueue {
     private List<PriorityItem> _queue = new();
 
     /// <summary>
@@ -13,6 +13,12 @@
         _queue.Add(newNode);
     }
 
+    /// <summary>
+    /// Remove and return the item with the highest priority. If there are multiple
+    /// items with the same highest priority, returns the one that was enqueued first.
+    /// If the queue is empty, prints an error message and returns null.
+    /// </summary>
+    /// <returns>The value of the dequeued item, or null if the queue is empty.</returns>
     public String Dequeue() {
         if (_queue.Count == 0) // Verify the queue is not empty
         {
@@ -21,14 +27,22 @@
         }
 
         // Find the index of the item with the highest priority to remove
+        // var highPriorityIndex = 0;
+        // for (int index = 1; index < _queue.Count - 1; index++) {
+        //     if (_queue[index].Priority >= _queue[highPriorityIndex].Priority)
+        //         highPriorityIndex = index;
+        // }
         var highPriorityIndex = 0;
-        for (int index = 1; index < _queue.Count - 1; index++) {
-            if (_queue[index].Priority >= _queue[highPriorityIndex].Priority)
-                highPriorityIndex = index;
+        for (int i = 1; i < _queue.Count; i++) {
+            if (_queue[i].Priority > _queue[highPriorityIndex].Priority ||
+                (_queue[i].Priority == _queue[highPriorityIndex].Priority && i < highPriorityIndex)) {
+                highPriorityIndex = i;
+            }
         }
 
         // Remove and return the item with the highest priority
         var value = _queue[highPriorityIndex].Value;
+        _queue.RemoveAt(highPriorityIndex);
         return value;
     }
 
