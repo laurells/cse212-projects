@@ -111,6 +111,20 @@ public static class SetsAndMapsTester {
         // To display the pair correctly use something like:
         // Console.WriteLine($"{word} & {pair}");
         // Each pair of words should displayed on its own line.
+        HashSet<string> wordSet = new HashSet<string>(words);
+        
+        foreach (var word in words) {
+            // Skip words with the same letters
+            if (word[0] == word[1]) continue;
+
+            // Create the reversed version of the word
+            string reversedWord = $"{word[1]}{word[0]}";
+
+            // Check if the reversed word exists in the set
+            if (wordSet.Contains(reversedWord)) {
+                Console.WriteLine($"{word} & {reversedWord}");
+            }
+        }
     }
 
     /// <summary>
@@ -132,6 +146,16 @@ public static class SetsAndMapsTester {
         foreach (var line in File.ReadLines(filename)) {
             var fields = line.Split(",");
             // Todo Problem 2 - ADD YOUR CODE HERE
+            if (fields.Length >= 4) {
+                string degree = fields[3].Trim();
+
+                // Add the degree to the dictionary or update the count
+                if (degrees.ContainsKey(degree)) {
+                    degrees[degree]++;
+                } else {
+                    degrees[degree] = 1;
+                }
+            }
         }
 
         return degrees;
@@ -158,7 +182,41 @@ public static class SetsAndMapsTester {
     /// #############
     private static bool IsAnagram(string word1, string word2) {
         // Todo Problem 3 - ADD YOUR CODE HERE
-        return false;
+        // Normalize the words: remove spaces and convert to lower case
+        word1 = word1.Replace(" ", "").ToLower();
+        word2 = word2.Replace(" ", "").ToLower();
+
+        // If lengths differ, they cannot be anagrams
+        if (word1.Length != word2.Length) {
+            return false;
+        }
+
+        // Dictionary to count occurrences of each letter
+        var letterCount = new Dictionary<char, int>();
+
+        // Count letters in the first word
+        foreach (var letter in word1) {
+            if (letterCount.ContainsKey(letter)) {
+                letterCount[letter]++;
+            } else {
+                letterCount[letter] = 1;
+            }
+        }
+
+        // Subtract counts using the second word
+        foreach (var letter in word2) {
+            if (letterCount.ContainsKey(letter)) {
+                letterCount[letter]--;
+                if (letterCount[letter] < 0) {
+                    return false; // More of this letter in word2 than in word1
+                }
+            } else {
+                return false; // Letter not found in word1
+            }
+        }
+
+        // If all counts are zero, they are anagrams
+        return true;
     }
 
     /// <summary>
@@ -235,5 +293,16 @@ public static class SetsAndMapsTester {
         // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
         // on those classes so that the call to Deserialize above works properly.
         // 2. Add code below to print out each place a earthquake has happened today and its magitude.
+        if (featureCollection?.Features != null)
+    {
+        foreach (var feature in featureCollection.Features)
+        {
+            Console.WriteLine($"{feature.Properties.Place} - Mag {feature.Properties.Mag}");
+        }
+    }
+    else
+    {
+        Console.WriteLine("No earthquake data available.");
+    }
     }
 }
