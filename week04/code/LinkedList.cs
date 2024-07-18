@@ -17,9 +17,9 @@ public class LinkedList : IEnumerable<int> {
         }
         // If the list is not empty, then only head will be affected.
         else {
-            newNode.Next = _head; // Connect new node to the previous head
-            _head.Prev = newNode; // Connect the previous head to the new node
-            _head = newNode; // Update the head to point to the new node
+            newNode.Next = _head;
+            _head.Prev = newNode; 
+            _head = newNode; 
         }
     }
 
@@ -28,6 +28,15 @@ public class LinkedList : IEnumerable<int> {
     /// </summary>
     public void InsertTail(int value) {
         // TODO Problem 1
+        Node newNode = new Node(value);
+        if (_tail is null) {
+            _head = newNode;
+            _tail = newNode;
+        } else {
+            _tail.Next = newNode; 
+            newNode.Prev = _tail; 
+            _tail = newNode; 
+        }
     }
 
 
@@ -45,8 +54,8 @@ public class LinkedList : IEnumerable<int> {
         // If the list has more than one item in it, then only the head
         // will be affected.
         else if (_head is not null) {
-            _head.Next!.Prev = null; // Disconnect the second node from the first node
-            _head = _head.Next; // Update the head to point to the second node
+            _head.Next!.Prev = null; 
+            _head = _head.Next; 
         }
     }
 
@@ -56,6 +65,13 @@ public class LinkedList : IEnumerable<int> {
     /// </summary>
     public void RemoveTail() {
         // TODO Problem 2
+        if (_tail == _head) {
+            _tail = null;
+            _head = null;
+        } else if (_tail is not null) {
+            _tail.Prev!.Next = null; 
+            _tail = _tail.Prev; 
+        }
     }
 
     /// <summary>
@@ -76,10 +92,10 @@ public class LinkedList : IEnumerable<int> {
                 // new node and reconnect the links to insert.
                 else {
                     Node newNode = new(newValue);
-                    newNode.Prev = curr; // Connect new node to the node containing 'value'
-                    newNode.Next = curr.Next; // Connect new node to the node after 'value'
-                    curr.Next!.Prev = newNode; // Connect node after 'value' to the new node
-                    curr.Next = newNode; // Connect the node containing 'value' to the new node
+                    newNode.Prev = curr;
+                    newNode.Next = curr.Next; 
+                    curr.Next!.Prev = newNode; 
+                    curr.Next = newNode;
                 }
 
                 return; // We can exit the function after we insert
@@ -94,6 +110,22 @@ public class LinkedList : IEnumerable<int> {
     /// </summary>
     public void Remove(int value) {
         // TODO Problem 3
+        Node? current = _head;
+        
+        while (current is not null) {
+            if (current.Data == value) {
+                if (current == _head) {
+                    RemoveHead();
+                } else if (current == _tail) {
+                    RemoveTail();
+                } else {
+                    current.Prev!.Next = current.Next;
+                    current.Next!.Prev = current.Prev;
+                }
+                return;
+            }
+            current = current.Next;
+        }
     }
 
     /// <summary>
@@ -101,6 +133,14 @@ public class LinkedList : IEnumerable<int> {
     /// </summary>
     public void Replace(int oldValue, int newValue) {
         // TODO Problem 4
+         Node? current = _head;
+
+        while (current is not null) {
+            if (current.Data == oldValue) {
+                current.Data = newValue;
+            }
+            current = current.Next;
+        }
     }
 
     /// <summary>
@@ -127,7 +167,11 @@ public class LinkedList : IEnumerable<int> {
     /// </summary>
     public IEnumerable Reverse() {
         // TODO Problem 5
-        yield return 0; // replace this line with the correct yield return statement(s)
+        Node? current = _tail;
+        while (current != null) {
+            yield return current.Data;
+            current = current.Prev;
+        }
     }
 
     public override string ToString() {
